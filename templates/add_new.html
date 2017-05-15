@@ -24,33 +24,29 @@ and is wrapped around the whole page content, except for the footer in this exam
 
 <!-- Blog entries -->
 <div class="w3-col l8 s12">
-  <p><a href="/add_new" class="w3-button w3-padding-large w3-white w3-margin w3-border">ADD NEW POST</a></p>
   <!-- Blog entry -->
-  {%for post in posts%}
+
   <div class="w3-card-4 w3-margin w3-white">
     <div class="w3-container">
-      <h3><b>{{post.title}}</b></h3>
-      <h5>{{post.title}} by {{post.author}} <span class="w3-opacity">{{post.pdate}}</span></h5>
-
+    <span class="w3-opacity"></span>
     </div>
 
     <div class="w3-container">
-      <p>{{post.blog}}...</p>
+      <form action="/add_new" id="textform2" method="post">
+        <p>Title: <input type="textarea" name="title" size="126"></p>
+        <p>Post:
+        <textarea rows="30" cols="100" name="post" form="post" style="width: 872px; height: "></textarea></p>
+        <p><input type="submit" value="Post Blog" class="w3-button w3-padding-large w3-white w3-border"></input>
+          <a href="/dashboard" class="w3-button w3-padding-large w3-white w3-border">Back to Dashboard</a></p>
+      </form>
       <div class="w3-row">
-              <div class="w3-col m8 s12">
-                <form action="/delete" id="textform2" method="post">
-                <p><a href="/edit_post/{{post.id}}" class="w3-button w3-padding-large w3-white w3-border">EDIT POST</a>
-
-                  <input type="hidden" name="id" value="{{post.id}}">
-                <input type="submit" value="DELETE POST" class="w3-button w3-padding-large w3-white w3-border"></input></p>
-                </form>
-              </div>
+        <div class="w3-col m8 s12">
+          <p>
+        </div>
 
       </div>
-
     </div>
   </div>
-       {% endfor %}
 <!-- END BLOG ENTRIES -->
 </div>
 
@@ -74,8 +70,8 @@ and is wrapped around the whole page content, except for the footer in this exam
 
 <!-- Footer -->
 <footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
-  <a href="/"><button class="w3-button w3-black w3-padding-large w3-margin-bottom">Return Home</button></a>
-  <p>Powered by <a href="https://www.linkedin.com/in/maximryklis/" target="_blank">Maxim</a></p>
+    <a href="/"><button class="w3-button w3-black w3-padding-large w3-margin-bottom">Return Home</button></a>
+ <p>Powered by <a href="https://www.linkedin.com/in/maximryklis/" target="_blank">Maxim</a></p>
 </footer>
 
 </body>
