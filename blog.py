@@ -111,16 +111,23 @@ def add_new():
         if request.method == 'GET':
             return render_template('add_new.html')
         elif request.method == 'POST':
-            post = request.form['post']
-            title = request.form['title']
-            author = USERNAME
-            pdate = time.strftime("%Y-%m-%d")
-            conn = sqlite3.connect(DATABASE)
-            c = conn.cursor()
-            c.execute('''INSERT INTO POSTS (TITLE, PDATE, AUTHOR, BLOG) values (?,?,?,?)''', (title, pdate,author,post))
-            conn.commit()
-            conn.close()
-            return redirect('/dashboard')
+            return redirect('/insert')
+
+@app.route('/insert', methods=['GET', 'POST'])
+def insert():
+    if session['logged_in'] != True:
+        return redirect('/login')
+    else:
+        post = request.form['post']
+        title = request.form['title']
+        author = USERNAME
+        pdate = time.strftime("%Y-%m-%d")
+        conn = sqlite3.connect(DATABASE)
+        c = conn.cursor()
+        c.execute('''INSERT INTO POSTS (TITLE, PDATE, AUTHOR, BLOG) values (?,?,?,?)''', (title, pdate,author,post))
+        conn.commit()
+        conn.close()
+        return redirect('/dashboard')
 
 
 
