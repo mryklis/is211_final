@@ -13,7 +13,7 @@ app.config.from_object(__name__)
 def get_posts():
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
-    c.execute('''select ID, TITLE, PDATE, AUTHOR, BLOG from POSTS ORDER BY PDATE DESC''')
+    c.execute('''select ID, TITLE, PDATE, AUTHOR, BLOG from POSTS ORDER BY ID DESC''')
     posts = [dict(id=row[0], title=row[1], pdate=row[2], author=row[3], blog=row[4][0:200]) for row in c.fetchall()]
     conn.close()
     return posts
@@ -31,6 +31,7 @@ def login():
             error = 'Invalid Login Credentials'
             return render_template('/login.html', error=error)
         else:
+            session['username'] = request.form['username']
             session['logged_in'] = True
             return redirect('/dashboard')
     else:
@@ -120,6 +121,9 @@ def add_new():
             conn.commit()
             conn.close()
             return redirect('/dashboard')
+
+
+
 
 if __name__ == '__main__':
     app.run()
