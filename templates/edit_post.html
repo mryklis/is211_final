@@ -17,10 +17,9 @@ and is wrapped around the whole page content, except for the footer in this exam
 <!-- Header -->
     {%for post in posts%}
 <header class="w3-container w3-center w3-padding-32">
-  <form action="/edit_post/<id>" id="textform1" method="post", name="hid">
-    <h5><b>Post: {{post.id}} {{post.title}} by {{post.author}}</b></h5>
+    <h5><b>Post: {{post.id}} "{{post.title}}" by {{post.author}}</b></h5>
 
-  </form>
+
 
 </header>
 
@@ -37,9 +36,14 @@ and is wrapped around the whole page content, except for the footer in this exam
     </div>
 
     <div class="w3-container">
-      <form action="/edit_post/<id>" id="textform2" method="post">
+      <form action="/update" id="textform2" method="post">
         <textarea rows="30" cols="100" name="post" form="post" style="width: 872px; height: 565px;">{{post.blog}}</textarea>
-        <input type="submit" value="Post Blog"></input>
+        <input type="hidden" name="id" value="{{post.id}}">
+        <input type="hidden" name="title" value="{{post.title}}">
+        <input type="hidden" name="author" value="{{post.author}}">
+        <input type="hidden" name="date" value="{{post.pdate}}">
+        <p><input type="submit" value="Post Blog" class="w3-button w3-padding-large w3-white w3-border"></input>
+          <a href="/dashboard" class="w3-button w3-padding-large w3-white w3-border">Back to Dashboard</a></p>
       </form>
       <div class="w3-row">
         <div class="w3-col m8 s12">

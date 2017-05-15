@@ -1,5 +1,6 @@
 import sqlite3
 from flask import Flask, render_template, request, redirect, session, flash
+import time
 
 DATABASE = 'blog.db'
 SECRET_KEY = 'LoremIpsum'
@@ -44,13 +45,16 @@ def read(id):
     conn.close()
     return render_template('/read_post.html', results=results)
 
-@app.route('/dashboard', methods=['GET'])
+@app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if session['logged_in'] != True:
         return redirect('/login')
     else:
-        return render_template('/dashboard.html', posts=get_posts())
-
+        if request.method == 'GET':
+            return render_template('/dashboard.html', posts=get_posts())
+        elif request.method == 'POST':
+            if request.form['submit'] == 'DELETE POST':
+                return redirect('/delete')
 
 @app.route('/edit_post/<id>', methods=['GET', 'POST'])
 def edit(id):
@@ -64,29 +68,58 @@ def edit(id):
     else:
         if request.method == 'GET':
             return render_template('/edit_post.html', posts=results)
-        else:
+        elif request.method == 'POST':
+            return redirect('/update')
+
+@app.route('/update', methods=['GET', 'POST'])
+def update():
+    if session['logged_in'] != True:
+        return redirect('/login')
+    else:
+        id = request.form['id']
+        post = request.form['post']
+        title = request.form['title']
+        author = request.form['author']
+        date = request.form['date']
+        conn = sqlite3.connect(DATABASE)
+        c = conn.cursor()
+        c.execute('''UPDATE POSTS SET TITLE = ?, PDATE = ?, AUTHOR = ?, BLOG = ? where ID = ?''',
+              (title, date, author, post, id))
+        conn.commit()
+        conn.close()
+        return redirect('/dashboard')
+
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+    if session['logged_in'] != True:
+        return redirect('/login')
+    else:
+        id = request.form['id']
+        conn = sqlite3.connect(DATABASE)
+        c = conn.cursor()
+        c.execute('''DELETE FROM POSTS WHERE ID = ?''', (id,))
+        conn.commit()
+        conn.close()
+        return redirect('/dashboard')
+
+@app.route('/add_new', methods=['GET', 'POST'])
+def add_new():
+    if session['logged_in'] != True:
+        return redirect('/login')
+    else:
+        if request.method == 'GET':
+            return render_template('add_new.html')
+        elif request.method == 'POST':
+            post = request.form['post']
+            title = request.form['title']
+            author = USERNAME
+            pdate = time.strftime("%Y-%m-%d")
             conn = sqlite3.connect(DATABASE)
             c = conn.cursor()
-            c.execute('select ID, TITLE, PDATE, AUTHOR, BLOG from POSTS where ID = ?', (4,))
-            results = [dict(id=row[0], title=row[1], pdate=row[2], author=row[3], blog=row[4]) for row in c.fetchall()]
-            print(results)
-            dic = results[0]
-            id = dic['id']
-            print(id)
-            title = dic['title']
-            print(title)
-            pdate = dic['pdate']
-            print(pdate)
-            author = dic['author']
-            print(author)
-            text = str(request.form['post'])
-            print(text)
-            # c.execute('''UPDATE POSTS SET TITLE = ?, PDATE = ?, AUTHOR = ?, BLOG = ? where ID = ?''',
-            #           (results['title'], results['pdate'], results['author'], text, results['id']))
-            # conn.commit()
-            # conn.close()
+            c.execute('''INSERT INTO POSTS (TITLE, PDATE, AUTHOR, BLOG) values (?,?,?,?)''', (title, pdate,author,post))
+            conn.commit()
+            conn.close()
             return redirect('/dashboard')
-
 
 if __name__ == '__main__':
     app.run()
