@@ -15,36 +15,32 @@ and is wrapped around the whole page content, except for the footer in this exam
 <div class="w3-content" style="max-width:1400px">
 
 <!-- Header -->
-<header class="w3-container w3-center w3-padding-32">
-  <h1><b>Welcome to the blog of <span class="w3-tag">Maxim</span></b></h1>
-</header>
+
 
 <!-- Grid -->
 <div class="w3-row">
 
-<!-- Blog entries -->
 <div class="w3-col l8 s12">
-  <!-- Blog entry -->
-  {%for post in posts%}
+  <!-- Login Form -->
   <div class="w3-card-4 w3-margin w3-white">
     <div class="w3-container">
-      <h3><b>{{post.title}}</b></h3>
-      <h5>{{post.title}} by {{post.author}} <span class="w3-opacity">{{post.pdate}}</span></h5>
+<div id='login'>
+  <header class="w3-container w3-center w3-padding-32">
+    <h5><b>Blog Author Login</b></h5>
+</header>
+		{% if error %}<p class="error"><strong>Error: </strong>{{ error }}{% endif %}
+		<form action="/login" method="post">
+		<p>
+			<label for="username">Username:<p></p></label>
+			<input type="text" name="username"></input></p>
+		<p>
+          <label for="password">Password:<p></p></label>
+			<input type="text" name="password"></input></p>
+  <p><input type="submit" value="Login" class="w3-button w3-padding-large w3-white w3-border"></input></p>
+		</form>
+</div>
+</div>
     </div>
-
-    <div class="w3-container">
-      <p>{{post.blog}}...</p>
-      <div class="w3-row">
-              <div class="w3-col m8 s12">
-                <p><a href="/read_post/{{post.id}}" class="w3-button w3-padding-large w3-white w3-border">READ MORE</a></p>
-              </div>
-
-      </div>
-
-    </div>
-  </div>
-       {% endfor %}
-<!-- END BLOG ENTRIES -->
 </div>
 
 <!-- Introduction menu -->
@@ -67,7 +63,7 @@ and is wrapped around the whole page content, except for the footer in this exam
 
 <!-- Footer -->
 <footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
-  <a href="/login"><button class="w3-button w3-black w3-padding-large w3-margin-bottom">Login</button></a>
+    <a href="/"><button class="w3-button w3-black w3-padding-large w3-margin-bottom">Return Home</button></a>
   <p>Powered by <a href="https://www.linkedin.com/in/maximryklis/" target="_blank">Maxim</a></p>
 </footer>
 
